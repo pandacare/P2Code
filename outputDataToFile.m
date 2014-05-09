@@ -1,27 +1,16 @@
-%function outputDataToFile(outputFileName,header)
+function outputDataToFile(outputFileName,trialData)
 %built .exel file for store result 
 %   Example:
-%   
+%   file = 'myExample.xlsx';
+%   header = {'a','a','b'};
+%   outputDataToFile(outputFileName);
 %   Written by LiC    
 %   05.08, 2014
 
-%file = outputFileName;
-file = 'myExample.xlsx';
-header = {'a','a','b'};
-xlswrite(file,header);
-a = xlsread(file);
-x = size(a,1);
-if ~size(a,1)
-    %we build header into the file
-    xlswrite(file, header);
-end
-
+file = outputFileName;
 [a0,a1,a2] = xlsread(file);
 nRows = (size(a2,1));
-
 nRows = nRows +1;
-
-t = zeros(1,10);
 
 % convert number to string
 b = num2str(nRows);
@@ -30,4 +19,4 @@ b = num2str(nRows);
 c = strcat('A', b);
 
 % right to file the data t on the sheet Folha1 begining in the row c (e.g. A20)
-xlswrite(file,t,1,c);
+xlswrite(file,trialData,1,c);
