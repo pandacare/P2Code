@@ -1,159 +1,24 @@
-clc;
-clear all;
-close all;
 
-F=1000; %Sampling frequency 1000 Hz
-Fs=F/2;
-
-%focus range (equals to 1 second plot on the figure)
-
-%No.of points used to calculate the baseline left to the magnetRelease point  
-n=100;
-
-%lasting length for continious comparation with threshold event 
-DURATION =30; %  window width used for EMG signal to determine onset
-Continuation=50;% Continious poits beyound the threshold   ( EMG )
-DURATION_F=100; %  window width used for grip signal to determine onset Force (Grip force )
-GripForceDuration = 50; % window width used for grip force rate (Grip force rate)
-delayTime =0;
-%SD used to determine the threshold
-num_std =3;
-
-%channel option
-channelForceXT = 1; %Thumb shear force
-channelForceXI = 7; %Index shear force
-channelForceZT = channelForceXT + 2; %Thumb grip
-channelForceZI = channelForceXI + 2; %Index grip
-channelEMGT = 13; % APB EMG
-channelEMGI = 14; % FDI EMG
-
-%cuttoff frequency for grip force
-w1=20;
-WnPass=w1/Fs;
-
-%Initialization
-startPoint =0;                    %signal start reference ms
-endPoint =44000;                  %signal stop reference ms
-lengthTime=endPoint-startPoint;
-dat=zeros(lengthTime,14);         %Matrix for holding raw data
-datMod=zeros(lengthTime,14);      %Matrix for holding filtered data
-lengthData = lengthTime;
-GripForceData = zeros(lengthData,1);
-GripForceDataIndexFinger = zeros(lengthData,1);
-meanStart = 11;
-meanEnd   = 110; %for offset cancellation
+%function [eventValue, eventTime] = eventOnset(inputData,searchStartPoint,event,method)
+% perturbation: method0 
+% gripForce: method0, method1, method2
+% gripForceRate: method0, method1, method2
+% EMG: method0
+%%%%%%%%
+% method: baseLine, nTimesSD, methodFunction
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+switch event
+    case 'perturbation'
+        %pertubation event
+        disp('perturbation event');
+    case 'gripForce'
+        %
+    case 'gripForceRate'
+        %
+    case 'EMG'
+        %
 
 
-%Open the data to be processed
-%file name length should be 18, max file number as input is 10
-
-[FileName,inputFilePath]=uigetfile('*.dat','Select the LabView Data','MultiSelect','on');
-numberFile = length(FileName);
-
-
-%Define parameter Header
-parameterHeader =  {'ThumbPerturbation', 'ThumbGripForce','ThumbEMGMethod0','ThumbEMGMethod1','ThumbEMGMethod2','IndexPerturbation','IndexGripForce','IndexEMGMethod0','IndexEMGMethod1','IndexEMGMethod2','MaxThumbGrip','MaxThumbGripIndex','MaxThumbRate','MaxThumbRateIndex','MaxIndexGrip','MaxIndexGripIndex','MaxIndexRate','MaxIndexRateIndex'};
-parameterNumber = length(parameterHeader);
-
-%Nniitilize output parameter array 
-resultArray = zeros(1, parameterNumber);
-
-
-% Output file name
-currentTime = fix(clock);
-currentTimeNameElement = arrayfun(@num2str, currentTime, 'UniformOutput', false);
-currentTimeName = strcat(currentTimeNameElement(1),currentTimeNameElement(2),currentTimeNameElement(3),currentTimeNameElement(4),currentTimeNameElement(5),currentTimeNameElement(6));
-prompt = {'Enter file name:','Enter condition:','Enter FM/P2'};
-dlg_title = '';
-num_lines = 1;
-def = {currentTimeName{1,1},'300','P2'};
-outputFileNameElement = inputdlg(prompt,dlg_title,num_lines,def);
-outputFileName = strcat(outputFileNameElement{1},'_',outputFileNameElement{2},'_',outputFileNameElement{3},'.xlsx');
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%% Data analysis %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%% Single file  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
- if (numberFile == 18 || numberFile == 1)
- 
-     f = fullfile(inputFilePath,FileName);
-     A = importdata(f);
-     
-     %Get weight drop release point
-     MagnetStart =round( A(1,1));
-     
-     %Set data analysis window length
-     magnetRelease = MagnetStart;
-     theTime1 = (magnetRelease -500)/1000;
-     theTime2 = theTime1+1.5;
-     
-     %Transfer raw data into analysis array "dat"
-     for i= 1:14
-     dat(:,i)=A(startPoint+1:endPoint,i);
-     end
-     
-     %Build filter for filtering raw data
-     [b1,a1] = butter(4,WnPass,'low');
-     
-     % filter raw Force data and store in "datMod" 
-     datMod(:,1)=filter(b1,a1,dat(:,1));
-     datMod(:,2)=filter(b1,a1,dat(:,2));
-     datMod(:,3)=filter(b1,a1,dat(:,3));
-     datMod(:,4)=filter(b1,a1,dat(:,4));
-     datMod(:,5)=filter(b1,a1,dat(:,5));
-     datMod(:,6)=filter(b1,a1,dat(:,6));
-     datMod(:,7)=filter(b1,a1,dat(:,7));
-     datMod(:,8)=filter(b1,a1,dat(:,8));
-     datMod(:,9)=filter(b1,a1,dat(:,9));
-     datMod(:,10)=filter(b1,a1,dat(:,10));
-     datMod(:,11)=filter(b1,a1,dat(:,11));
-     datMod(:,12)=filter(b1,a1,dat(:,12));
-
-     %variable definitions
-     baseLineStart = magnetRelease-n ;
-     
-     perturbationOnsetThumb = 1;
-     GripForceResponseOnsetThumb = 1;
-     EMGResponseThumbMethod0 = 1;
-     EMGResponseThumbMethod1 = 1;
-     EMGResponseThumbMethod2 = 1;
-     
-     perturbationOnsetIndex = 1;
-     GripForceResponseOnsetIndex = 1;
-     EMGResponseIndexMethod0 = 1;
-     EMGResponseIndexMethod1 = 1;
-     EMGResponseIndexMethod2 = 1;
-     gripForceRateMaxThumb   = 1;
-     gripForceRateMaxIndex   = 1;
-     
-     
-     finalIndexForceXT       = perturbationOnsetThumb;
-     finalIndexForceZT       = GripForceResponseOnsetThumb;
-     finalIndexEMGT          = EMGResponseThumbMethod0;
-     finalIndexEMGTAverage2  = EMGResponseThumbMethod1;
-     finalIndexEMGTAverage   = EMGResponseThumbMethod2;
-     finalIndexForceXI       = perturbationOnsetIndex;
-     finalIndexForceZI       = GripForceResponseOnsetIndex;
-     finalIndexEMGI          = EMGResponseIndexMethod0;
-     finalIndexEMGIAverage2  = EMGResponseIndexMethod1;
-     finalIndexEMGIAverage   = EMGResponseIndexMethod2;
-     finalIndexForceZTRate   = gripForceRateMaxThumb;
-     finalIndexForceZIRate   = gripForceRateMaxIndex;
-     
-     
-     
-
-%---------------------------Thumb----------------------------%
-             %%%%%%%%%%%%%%Thumb Shear%%%%%%%%%%%%%%%%
-figure % Shear force plot and the onset of the perturbation (Figure 1)
-
-plot(dat((theTime1*1000+1):theTime2*1000,channelForceXT),'k');
-title('Thumb Shear Force');
-ylabel('Force (N)') ;% label for y axis
-xlabel('Time (ms)'); % label for x axis
-hold on
 
 rec_xT = dat(:,channelForceXT); %shear force was analyzed with raw data
 PxT = dat((baseLineStart+1):(n+baseLineStart),channelForceXT);
