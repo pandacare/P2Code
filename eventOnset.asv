@@ -153,17 +153,18 @@ PzTRate = GripForceData((baseLineStart+1):(n+baseLineStart));
 thresholdForceZTRate = mean(PzTRate)+ std(PzTRate)*3;
 for j = (magnetRelease + 1):(theTime2*1000)
     w = 0;
-for i = j:(j+DURATION_F)
-    if abs(GripForceData(i))> abs(thresholdForceZT)
-      w = w + 1;  
-    end   
-end
+    for i = j:(j+DURATION_F)
+        if abs(GripForceData(i))> abs(thresholdForceZT)
+          w = w + 1;  
+        end   
+    end
     if w == DURATION_F
         finalIndexForceZTRate = j-theTime1*1000 - 1;
         break;
     end
     
 end
+
 absloteIndexGripForceThumbRate = finalIndexForceZTRate+theTime1*1000;
 [maxGripForceRateThumb, maxGripForceRateIndexThumb] = max(abs(GripForceData)) ;
 

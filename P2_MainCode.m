@@ -1,3 +1,4 @@
+%function
 clc;
 clear all;
 close all;
