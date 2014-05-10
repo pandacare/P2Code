@@ -1,22 +1,59 @@
 
-%function [eventValue, eventTime] = eventOnset(inputData,searchStartPoint,event,method)
-% perturbation: method0 
-% gripForce: method0, method1, method2
-% gripForceRate: method0, method1, method2
-% EMG: method0
+%function [eventValue, eventTime] = eventOnset(inputData,event,baseline,method)
+% event:
+% perturbation:  
+% gripForce: 
+% gripForceRate: 
+% EMG: 
+% baseline[3]:  baseLineStart, baseLineLength, nTimesSD
 %%%%%%%%
-% method: baseLine, nTimesSD, methodFunction
+% method[5]: searchRangeStart, searchRangeLength, methodFunction,duration1, duration2
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%baseLineData for baseLine window
+        baseLineData = inputData(baseLine(1):baseLine(2));
+        %calculation threshhod
+        threshhold = mean( baseLineData) + std( baseLineData)*baseline(3);
+
+
 switch event
+    
+    %pertubation event
     case 'perturbation'
-        %pertubation event
         disp('perturbation event');
+        
+        % 5 indicats the 5ms window
+        % assumpation that onset only happens in a 500 ms range after the magnetic
+        % relase
+        for j = (searchRange(1):searchRange(2)) 
+            w = 0;
+            for i = j:(j+5-1)
+                if inputData(i) > threshhold
+                w = w + 1;  
+                end   
+            end
+            if w == 5
+                eventTime  = j;
+                eventValue = inputData(j);
+                break;
+            end
+    
+        end
+        
+        
+    %gripforce response event    
     case 'gripForce'
-        %
+        %baseLineData for baseLine window
+        baseLineData = inputData(baseLine(1):baseLine(2));
+        
     case 'gripForceRate'
         %
     case 'EMG'
         %
+    otherwise 
+        disp('other value');
+end
+
 
 
 
