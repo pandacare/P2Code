@@ -1,4 +1,4 @@
-%function [eventValue, eventTime] = methodFunction(methodFunctionName)
+function [eventValue, eventTime] = methodFunction(methodFunctionName)
 % methodFunctionName
 % singleCompare  
 % meanCompare 
@@ -33,6 +33,7 @@ switch methodFunctionName
                 break;
             end
         end
+        
     case 'meanWindowCompare'
         for j = (method(1):(method(1) + method(2)))
             k =0;
