@@ -1,5 +1,5 @@
 
-%function [eventValue, eventTime, eventID] = eventOnset(inputData,event,baseline,method)
+function [eventValue, eventTime, eventID] = eventOnset(inputData,event,baseline,method)
 % event:
 % perturbation:  
 % gripForce: 
@@ -92,5 +92,8 @@ switch methodFunctionName
                break;
             end    
         end
+        
+    otherwise 
+        disp('wrong method setup');
 end
 
