@@ -14,33 +14,26 @@ function [eventValue, eventTime, eventID] = eventOnset(inputData,event,baseline,
 % meanWindowCompare 2
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%initial eventTime and eventValue
-eventValue = 0;
-eventTime  = 0;
+global parameterArray;
 
-%baseLineData for baseLine window
+%initial eventTime and eventValue
+eventValue = -1;
+eventTime  = -1;
+eventID = -1;
+
+%BaseLineData for baseLine window
 baseLineData = inputData(baseLine(1):baseLine(2));
         
-%calculation threshhod
+%Calculation threshlod
 threshhold = mean( baseLineData) + std( baseLineData)*baseline(3);
 
-switch event
-    
-    %pertubation event
-    case 'perturbation'
-        eventID = 0;   
-        
-    %gripforce response event    
-    case 'gripForce'
-        %baseLineData for baseLine window
-        eventID = 1;
-        
-    case 'gripForceRate'
-        eventID = 2;
-    case 'EMG'
-        eventID = 3;
-    otherwise 
-        disp('');
+%Setup eventID
+for i = 1 : length(parameterArray)
+    if parameterArray(i) == event
+        eventID = i;
+        break;
+    end
+     error('Wrong parameter number');
 end
 
 switch methodFunctionName
