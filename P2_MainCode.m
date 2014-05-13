@@ -344,8 +344,13 @@ for k = 1:numberFile
    xlswrite(outputFileName,{loadCondition},1,strcat('B', currentRow));
    
 end
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Display if only one file as input%%%%%%%%%%%%  
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Display if only one file as input%%%%%%%%%%%%  
+if numberFile == 1
+    %%%%%%% Plot Thumb results%%%%%%
+    
+    %
+end
 
 
 
