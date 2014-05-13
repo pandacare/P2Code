@@ -29,14 +29,14 @@ threshhold = mean( baseLineData) + std( baseLineData)*baseline(3);
 
 %Setup eventID
 for i = 1 : length(parameterArray)
-    if strcmp(parameterArray{i}, event)
+    if parameterArray{i} == strcmp(b.class, event'cell')
         eventID = i;
         break;
     end
-     %error('Wrong parameter number');
+     error('Wrong parameter number');
 end
 
-switch method(3)
+switch methodFunctionName
     %'singleCompare'
     case 0
         for j = (method(1):(method(1) + method(2))) 

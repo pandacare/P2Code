@@ -1,4 +1,4 @@
-function outputDataToFile(outputFileName,trialData)
+function b = outputDataToFile(outputFileName,trialData)
 %built .exel file for store result 
 %   Example:
 %   file = 'myExample.xlsx';
@@ -16,7 +16,7 @@ nRows = nRows +1;
 b = num2str(nRows);
 
 % if you want to add data to the collum A you make concat strings
-c = strcat('A', b);
+c = strcat('C', b);
 
 % right to file the data t on the sheet Folha1 begining in the row c (e.g. A20)
 xlswrite(file,trialData,1,c);

@@ -1,4 +1,4 @@
-function outputFileName = nameTheOutputFile()
+function [outputFileName,loadCondition] = nameTheOutputFile()
 %name the output file 
 %   Example:
 %   
@@ -13,4 +13,5 @@ dlg_title = '';
 num_lines = 1;
 def = {currentTimeName{1,1},'300','P2'};
 outputFileNameElement = inputdlg(prompt,dlg_title,num_lines,def);
+loadCondition = outputFileNameElement{2};
 outputFileName = strcat(outputFileNameElement{1},'_',outputFileNameElement{2},'_',outputFileNameElement{3},'.xlsx');
