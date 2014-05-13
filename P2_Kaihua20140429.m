@@ -70,8 +70,8 @@ outputFileName = strcat(outputFileNameElement{1},'_',outputFileNameElement{2},'_
      f = fullfile(inputFilePath,FileName);
      A = importdata(f);
      %get weight drop release point
-     %MagnetStart =round( A(1,1));
-     MagnetStart =10000;
+     MagnetStart =round( A(1,1));
+     %MagnetStart =10000;
      magnetRelease = MagnetStart;
      theTime1 = (magnetRelease -500)/1000;
      theTime2 = theTime1+2;

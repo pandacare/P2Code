@@ -22,7 +22,7 @@ eventTime  = -1;
 eventID = -1;
 
 %BaseLineData for baseLine window
-baseLineData = inputData(baseline(1):baseline(2));
+baseLineData = inputData(baseline(1):(baseline(1) + baseline(2)-1));
         
 %Calculation threshlod
 threshhold = mean( baseLineData) + std( baseLineData)*baseline(3);
@@ -39,7 +39,7 @@ end
 switch method(3)
     %'singleCompare'
     case 0
-        for j = (method(1):(method(1) + method(2))) 
+        for j = ((method(1)+1):(method(1) + method(2))) 
             w = 0;
             for i = j:(j+method(4)-1)
                 if inputData(i) > threshhold
@@ -54,7 +54,7 @@ switch method(3)
         end
     %'meanCompare'   
     case 1
-        for j = (method(1):(method(1) + method(2)))
+        for j = ((method(1)+1):(method(1) + method(2)))
             w = 0;
             for i = j:(j+method(4)-1)
                 w =w+inputData(i);  
@@ -68,7 +68,7 @@ switch method(3)
         end
     %'meanWindowCompare'    
     case 2
-        for j = (method(1):(method(1) + method(2)))
+        for j = ((method(1)+1):(method(1) + method(2)))
             k =0;
             for i = j:(j+method(5)-1)
                 w = 0;

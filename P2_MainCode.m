@@ -93,14 +93,13 @@ for k = 1:numberFile
    resultArray           = zeros(1,length(parameterArray));
    inputFileName         = fileName{k};
    rawData               = A{1,k};
-   %magnetRelease         = rawData(1,1);
-   magnetRelease         = 20000;
+   magnetRelease         = round(rawData(1,1));
    defaultBaselineLength = 100;
    searchRangeLength     = 1000;
    
    b1 = magnetRelease;
    b2 = defaultBaselineLength;
-   m1 = b1 + 1;
+   m1 = b1;
    m2 = searchRangeLength;
    
    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Thumb%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -112,14 +111,7 @@ for k = 1:numberFile
    method = [m1,m2,0,5,0]; %singleCompare, duration 5 ms
    [eventValue, eventTime, eventID] = eventOnset(inputData,event,baseline,method);
    resultArray(eventID) = eventTime; 
-        
-   
-    inputData = rawData((startPoint+1):endPoint,channelForceXaxisThumb);
-   event = 'ThumbEMGMethod5'; 
-   baseline = [b1-b2+1,b2,2]; %2 times SD for threshold calculation
-   method = [m1,m2,0,5,0]; %singleCompare, duration 5 ms
-   [eventValue, eventTime, eventID] = eventOnset(inputData,event,baseline,method);
-   resultArray(eventID) = eventTime; 
+  
    %ThumbGripForce
    %ThumbEMGMethod0
    %ThumbEMGMethod1                      

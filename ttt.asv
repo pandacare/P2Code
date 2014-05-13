@@ -1,3 +1,0 @@
-if parameterArray{3} == 'eee'
- xxxx = 0; 
-end
