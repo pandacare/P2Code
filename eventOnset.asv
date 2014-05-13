@@ -87,7 +87,7 @@ switch method(3)
         end
     %'max'
     case 3
-    [eventValue, eventTime] = max(inputData((method(1)+1):(method(1) + method(2)))) ;    
+    [eventValue, eventTime] = max(abs(GripForceData)) ;    
     otherwise 
         disp('wrong method setup');
 end
