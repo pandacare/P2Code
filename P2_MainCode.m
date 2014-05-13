@@ -112,7 +112,14 @@ for k = 1:numberFile
    method = [m1,m2,0,5,0]; %singleCompare, duration 5 ms
    [eventValue, eventTime, eventID] = eventOnset(inputData,event,baseline,method);
    resultArray(eventID) = eventTime; 
-
+        
+   
+    inputData = rawData((startPoint+1):endPoint,channelForceXaxisThumb);
+   event = 'ThumbEMGMethod5'; 
+   baseline = [b1-b2+1,b2,2]; %2 times SD for threshold calculation
+   method = [m1,m2,0,5,0]; %singleCompare, duration 5 ms
+   [eventValue, eventTime, eventID] = eventOnset(inputData,event,baseline,method);
+   resultArray(eventID) = eventTime; 
    %ThumbGripForce
    %ThumbEMGMethod0
    %ThumbEMGMethod1                      
